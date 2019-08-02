@@ -1,0 +1,41 @@
+language: generic
+dist: bionic
+cache: packages
+
+addons: 
+  apt: 
+    packages: 
+      - libarchive-dev
+      - singularity-container
+
+install:
+  # Check dead links
+  - sudo apt-get install -qq npm
+  - npm config set strict-ssl false
+  - sudo npm install -g markdown-link-check
+  # Check dead links before singularity installs itself
+  - rm .travis.yml
+  - ./scripts/check_dead_links
+
+script:
+  # Show the location
+  - which singularity
+  # Show the singularity version
+  - singularity --version
+  # Build an image, must use sudo
+  - sudo singularity build hello_world.simg shub://singularityhub/ubuntu
+  # Run the image
+  # Show the root ...
+  - singularity exec hello_world.simg ls /
+  # ... which is different from Travis' root
+  - ls /
+  # ... but running it like this, gives the Travis folder :-s
+  - singularity exec hello_world.simg ls
+  # Show the /singularity file ...
+  - singularity exec hello_world.simg cat /singularity
+  # ... which is absent on Travis
+  - cat /singularity || true
+  # Show the singularity OS version ...
+  - singularity exec hello_world.simg cat /etc/os-releas* 
+  # ... which is different on Travis
+  - cat /etc/os-releas*
