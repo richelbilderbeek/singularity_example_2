@@ -6,6 +6,7 @@ addons:
   apt: 
     packages: 
       - libarchive-dev
+      - singularity
       - singularity-container
 
 install:
