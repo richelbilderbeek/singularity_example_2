@@ -2,14 +2,15 @@ language: generic
 dist: bionic
 cache: packages
 
-addons: 
-  apt: 
-    packages: 
-      - libarchive-dev
-      - singularity
-      - singularity-container
+#addons: 
+#  apt: 
+#    packages: 
+#      - libarchive-dev
+#      - singularity-container
 
 install:
+  # Check dead links
+  - sudo apt-get install -qq singularity-container
   # Check dead links
   - sudo apt-get install -qq npm
   - npm config set strict-ssl false
