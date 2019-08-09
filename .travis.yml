@@ -15,12 +15,18 @@ install:
   - sudo apt-get install -qq npm
   - npm config set strict-ssl false
   - sudo npm install -g markdown-link-check
-  # Check dead links before singularity installs itself
-  - rm .travis.yml
-  - ./scripts/check_dead_links
 
 script:
   # Show the location
   - which singularity
   # Show the singularity version
   - singularity --version
+  # Build the container
+  - ./build_container
+  # Run the container
+  - ./lolcow.sif
+  # Check dead links
+  - rm -f *.sif
+  - rm -f *.tar.gz
+  - sudo rm -rf singularity
+  - ./scripts/check_dead_links || true
